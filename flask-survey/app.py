@@ -29,16 +29,13 @@ def start_survey():
 def handle_question():
     """Save response and redirect to next question."""
 
-    # get the response choice
     choice = request.form['answer']
 
-    # add this response to the session
     responses = session[RESPONSES_KEY]
     responses.append(choice)
     session[RESPONSES_KEY] = responses
 
     if (len(responses) == len(survey.questions)):
-        # They've answered all the questions! Thank them.
         return redirect("/complete")
 
     else:
@@ -50,15 +47,12 @@ def show_question(qid):
     responses = session.get(RESPONSES_KEY)
 
     if (responses is None):
-        # trying to access question page too soon
         return redirect("/")
 
     if (len(responses) == len(survey.questions)):
-        # They've answered all the questions! Thank them.
         return redirect("/complete")
 
     if (len(responses) != qid):
-        # Trying to access questions out of order.
         flash(f"Invalid question id: {qid}.")
         return redirect(f"/questions/{len(responses)}")
 
